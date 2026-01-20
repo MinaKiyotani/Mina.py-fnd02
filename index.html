@@ -1,0 +1,53 @@
+# === データ分析とデータ可視化 === Day18-01
+
+# ====== データクレンジング ===============
+import pandas as pd
+import matplotlib.pyplot as plt
+import japanize_matplotlib
+
+# ファイルを読み込む
+df =pd.read_csv("kijyungai.csv")
+
+# データの先頭を確認
+print("\n--- データの先頭 ---")
+print(df.head())
+
+# データの情報を確認（データ型・欠損値・構造）
+print("\n--- データの情報 ---")
+df.info()
+
+# 数値列の統計情報を確認（平均・標準値差など）
+print("\n--- データの統計情報 ---")
+print(df.describe())
+
+# 欠損値の確認
+print("\n--- 欠損値の確認 ---")
+print(df.isnull().sum())
+
+# 欠損値を含む行を削除
+df = df.dropna()
+print(df)
+
+# データの情報を確認（データ型・欠損値・構造）：再確認
+print("\n--- データの情報 ---")
+df.info()
+
+
+# ====== 分析 ===============
+
+# 品番ごとの除外理由合計を確認
+print("\n--- 品番ごとの除外理由合計 ---")
+reason_by_part = df.groupby("除外理由")["品番数"].sum()
+print(reason_by_part)
+
+# グラフで可視化
+reason_by_part.plot(kind = "bar", title = "除外理由別 品番数")
+plt.xlabel("除外理由")
+plt.ylabel("品番数")
+plt.tight_layout()
+plt.show()
+
+# 仮説を立てる
+
+## 抽出作業：経年数による品番抽出　複雑そう、手戻り
+## 種類削減：車種による除外　約100品番（基準見直しについては主管部署との調整が必要）
